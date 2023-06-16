@@ -1,16 +1,16 @@
 import * as express from "express";
 import * as DB from "./db.js";
 
-// TODO: add logger
-// import logger from './logger.js';
-
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  DB.addMemory("hello");
+router.get("/", async (req, res) => {
   res.send("Server is running ⚡️");
 });
 
-router.post("/add", (req, res) => {});
+router.post("/memory", async (req, res) => {
+  const { content } = req.body;
+  const memory = await DB.insertMemory({ content });
+  res.send(memory);
+});
 
 export default router;
