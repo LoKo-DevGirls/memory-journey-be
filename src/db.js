@@ -19,3 +19,15 @@ export async function insertMemory({ content, category }) {
   }
   return data[0];
 }
+
+export async function insertMuse({ id: memory_id, museContent }) {
+  const { data, error } = await supabase
+    .from("muse")
+    .insert([{ memory_id: memory_id, muse: museContent }])
+    .select();
+  if (error) {
+    console.log(error);
+    throw new Error();
+  }
+  return data[0];
+}
