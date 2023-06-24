@@ -20,7 +20,7 @@ export async function insertMemory({ content }) {
     thalia: 0,
     urania: 0,
   };
-  const memory = { content, imageUrl, tags, ...sentiments };
+  const memory = { content, imageUrl, tags };
   const { data, error } = await supabase
     .from("memories")
     .insert(memory)
