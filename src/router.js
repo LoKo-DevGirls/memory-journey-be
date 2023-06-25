@@ -9,14 +9,14 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/memory", async (req, res) => {
-  const { content, category } = req.body;
+  const { content, category, sentiments } = req.body;
 
   if (!content) {
     return res.status(400).send("Missing content in body");
   }
 
   try {
-    const memory = await DB.insertMemory({ content, category });
+    const memory = await DB.insertMemory({ content, category, sentiments });
     try {
       // await sendMemoryToProcessing(memory);
       return res.status(200).send(memory);
