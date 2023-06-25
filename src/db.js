@@ -8,7 +8,18 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function insertMemory({ content, category }) {
   const imageUrl = "";
-  const memory = { content, imageUrl, ...category };
+  const sentiments = {
+    calliope: 1,
+    clio: 0,
+    erato: 0,
+    euterpe: 0,
+    melpomene: 0,
+    polyhymnia: 0,
+    terpsichore: 0,
+    thalia: 0,
+    urania: 0,
+  };
+  const memory = { content, imageUrl, category, ...sentiments };
   const { data, error } = await supabase
     .from("memories")
     .insert(memory)
