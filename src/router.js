@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as DB from "./db.js";
-// import { sendMemoryToProcessing } from "./webSocket.js";
+import { sendMemoryToProcessing } from "./webSocket.js";
+import { generateImageURL } from "./logics.js";
 
 const router = express.Router();
 
@@ -16,18 +17,22 @@ router.post("/memory", async (req, res) => {
   }
 
   try {
-    const memory = await DB.insertMemory({ content, category, sentiments });
+    const imageUrl = await generateImageURL({ memory: content });
+    const memory = await DB.insertMemory({
+      content,
+      category,
+      sentiments,
+      imageUrl,
+    });
     try {
-      // await sendMemoryToProcessing(memory);
+      sendMemoryToProcessing(memory);
       return res.status(200).send(memory);
     } catch (processingError) {
       console.error("Error in Processing:", processingError);
-      // Handle the error from sendMemoryToProcessing
       return res.status(500).send("Something went wrong in Processing");
     }
   } catch (dbError) {
     console.error("Error in DB:", dbError);
-    // Handle the error from DB.insertMemory
     return res.status(500).send("Something went wrong in DB");
   }
 });

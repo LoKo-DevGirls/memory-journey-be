@@ -6,8 +6,12 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export async function insertMemory({ content, category, sentiments }) {
-  const imageUrl = "";
+export async function insertMemory({
+  content,
+  category,
+  sentiments,
+  imageUrl,
+}) {
   const memory = { content, imageUrl, category, ...sentiments };
   const { data, error } = await supabase
     .from("memories")
