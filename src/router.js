@@ -30,12 +30,10 @@ router.post("/memory", async (req, res) => {
       sendMemoryToProcessing(memory);
       return res.status(200).send(memory);
     } catch (processingError) {
-      console.error("Error in Processing:", processingError);
-      return res.status(500).send("Something went wrong in Processing");
+      return res.status(500).send("Error in websocket:", processingError);
     }
   } catch (dbError) {
-    console.error("Error in DB:", dbError);
-    return res.status(500).send("Something went wrong in DB");
+    return res.status(500).send("Error in DB:", dbError);
   }
 });
 
