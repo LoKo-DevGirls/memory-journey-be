@@ -58,3 +58,21 @@ export async function getAll({ category }) {
 
   return data;
 }
+
+export async function insertTags({ tags, memoryId }) {
+  const tagList = [];
+  const tag = tags.map(value => ({ tag: value, memory_id: memoryId }));
+  tagList.push(...tag);
+
+  const { data, error } = await supabase
+    .from("tags")
+    .insert(tagList)
+    .select();
+
+  if (error) {
+    console.log(error);
+    throw new Error();
+  }
+  return data;
+}
+

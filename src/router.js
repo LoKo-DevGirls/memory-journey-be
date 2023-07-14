@@ -32,7 +32,7 @@ router.get("/memory", async (req, res) => {
 })
 
 router.post("/memory", async (req, res) => {
-  const { content, category, consciousness, time, feeling } = req.body;
+  const { content, category, consciousness, time, feeling, tags } = req.body;
 
   if (!content) {
     return res.status(400).send("Missing content in body");
@@ -48,6 +48,12 @@ router.post("/memory", async (req, res) => {
       time,
       feeling,
     });
+
+    const memoryId = memory.id;
+    if(memoryId !== undefined && tags !== undefined && tags.length !== 0) {
+      memory.tag = await DB.insertTags({ tags, memoryId });
+    }
+
     try {
       sendMemoryToProcessing(memory);
       return res.status(200).send(memory);
