@@ -17,6 +17,9 @@ wss.on("connection", function connection(ws) {
 export function sendMemoryToProcessing(memory) {
   const memoryString = JSON.stringify(memory);
   let sent = false;
+  if (wss.clients.length === 0) {
+    throw new Error("No clients connected");
+  }
 
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
@@ -26,6 +29,6 @@ export function sendMemoryToProcessing(memory) {
   });
 
   if (!sent) {
-    throw new Error("Processing is not connected");
+    throw new Error("Filed to send data");
   }
 }

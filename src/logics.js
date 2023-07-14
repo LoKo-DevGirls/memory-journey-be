@@ -1,4 +1,4 @@
-import { askChatGPT, createImage } from "../service";
+import { askChatGPT, createImage } from "./service.js";
 
 export async function generateTags({ memory }) {
   const prompt = `Generate at most 10 one word tags that explain this memory the most, if the memory is too short, you can make only one tag.: \n"${memory}"\n`;
@@ -9,7 +9,6 @@ export async function generateTags({ memory }) {
     .split(", ")
     .filter((tag) => tag !== "");
 
-  // tags array
   return tags;
 }
 
@@ -17,7 +16,6 @@ export async function generateImageURL({ memory }) {
   const prompt = `Generate an image that explains this memory the most: \n"${memory}"\n`;
   const imageUrl = await createImage({ prompt });
 
-  // image url string
   return imageUrl;
 }
 
