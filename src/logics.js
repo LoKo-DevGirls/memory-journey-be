@@ -1,7 +1,7 @@
 import { askChatGPT, createImage } from "./service.js";
 
 export async function generateTags({ memory }) {
-  const prompt = `Generate at most 10 one word tags that explain this memory the most, if the memory is too short, you can make only one tag.: \n"${memory}"\n`;
+  const prompt = `Generate at most 10 one word tags that explain this memory the most, adjust the number of tags with the length of memory. Return only tags with comma separated.: \n"${memory}"\n`;
   const answer = await askChatGPT({ prompt });
 
   const tags = answer

@@ -19,9 +19,6 @@ export async function askChatGPT({ prompt }) {
     ],
   });
 
-  console.log("asked: ", prompt);
-  console.log("answered: ", completion.data.choices[0].message.content);
-
   return completion.data.choices[0].message.content;
 }
 
@@ -31,9 +28,6 @@ export async function createImage({ prompt, n = 1, size = "512x512" }) {
     n,
     size,
   });
-
-  console.log("prompt: ", prompt);
-  console.log("image url: ", completion.data.data[0].url);
 
   return completion.data.data[0].url;
 }
