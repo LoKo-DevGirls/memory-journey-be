@@ -26,14 +26,53 @@ export async function insertMemory({
   return data[0];
 }
 
-export async function insertMuse({ id: memory_id, museContent }) {
+export async function get({ id }) {
   const { data, error } = await supabase
-    .from("muse")
-    .insert([{ memory_id: memory_id, muse: museContent }])
-    .select();
+    .from("memories")
+    .select("*")
+    .eq('id', id);
   if (error) {
     console.log(error);
     throw new Error();
   }
   return data[0];
 }
+
+export async function getAll({ category }) {
+  let query = supabase
+    .from("memories")
+    .select("*");
+
+  // category 값이 주어진 경우에만 조건 추가
+  if (category !== null && category !== undefined) {
+    query = query.eq('category', category);
+  }
+
+  // SELECT 쿼리 실행
+  const { data, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error();
+  }
+
+  return data;
+}
+
+export async function insertTags({ tags, memoryId }) {
+  const tagList = [];
+  const tag = tags.map(value => ({ tag: value, memory_id: memoryId }));
+  tagList.push(...tag);
+
+  const { data, error } = await supabase
+    .from("tags")
+    .insert(tagList)
+    .select();
+
+  if (error) {
+    console.log(error);
+    throw new Error();
+  }
+  return data;
+}
+
