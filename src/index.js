@@ -1,7 +1,6 @@
-import app from "./app.js";
+import { server } from "./webSocket.js";
 const PORT = process.env.PORT || "80";
-// testing db
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server is running from http://localhost:${PORT}`);
 });

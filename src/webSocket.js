@@ -1,6 +1,10 @@
+import { createServer } from "http";
 import { WebSocket, WebSocketServer } from "ws";
+import app from "./app.js";
 
-const wss = new WebSocketServer({ port: 7070 });
+export const server = createServer(app);
+
+const wss = new WebSocketServer({ server });
 
 wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
@@ -29,6 +33,6 @@ export function sendMemoryToProcessing(memory) {
   });
 
   if (!sent) {
-    throw new Error("Filed to send data");
+    throw new Error("Failed to send data");
   }
 }
