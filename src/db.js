@@ -8,13 +8,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function insertMemory({
   content,
-  category,
   imageUrl,
   consciousness,
   time,
   feeling,
+  tags,
 }) {
-  const memory = { content, imageUrl, category, consciousness, time, feeling };
+  const memory = { content, imageUrl, consciousness, time, feeling, tags };
   const { data, error } = await supabase
     .from("memories")
     .insert(memory)
@@ -31,6 +31,7 @@ export async function get({ id }) {
     .from("memories")
     .select("*")
     .eq('id', id);
+
   if (error) {
     console.log(error);
     throw new Error();
@@ -38,15 +39,10 @@ export async function get({ id }) {
   return data[0];
 }
 
-export async function getAll({ category }) {
+export async function getAll() {
   let query = supabase
     .from("memories")
     .select("*");
-
-  // category 값이 주어진 경우에만 조건 추가
-  if (category !== null && category !== undefined) {
-    query = query.eq('category', category);
-  }
 
   // SELECT 쿼리 실행
   const { data, error } = await query;
@@ -59,20 +55,42 @@ export async function getAll({ category }) {
   return data;
 }
 
-export async function insertTags({ tags, memoryId }) {
-  const tagList = [];
-  const tag = tags.map(value => ({ tag: value, memory_id: memoryId }));
-  tagList.push(...tag);
+async function getTagList({ memoryId }) {
+  return supabase
+    .from("memories")
+    .select("tags")
+    .eq('memory_id', memoryId);
+}
 
+export async function updateMemory(id, {
+  content,
+  imageUrl,
+  consciousness,
+  time,
+  feeling,
+  tags,
+}) {
+  const memory = { content, imageUrl, consciousness, time, feeling, tags };
   const { data, error } = await supabase
-    .from("tags")
-    .insert(tagList)
+    .from("memories")
+    .update(memory)
+    .eq('id', id)
     .select();
-
   if (error) {
     console.log(error);
     throw new Error();
   }
-  return data;
+  return data[0];
 }
 
+export async function deleteMemory(id) {
+  const { data, error } = await supabase
+    .from("memories")
+    .delete()
+    .eq('id', id);
+  if (error) {
+    console.log(error);
+    throw new Error();
+  }
+  return data[0];
+}
