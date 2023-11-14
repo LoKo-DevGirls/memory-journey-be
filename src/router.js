@@ -31,6 +31,16 @@ router.get("/memory", async (req, res) => {
   }
 })
 
+router.get("/tags", async (req, res) => {
+  try {
+    const tags = await DB.getTagList();
+    return res.status(200).send(tags);
+  } catch (dbError) {
+    console.error('Error executing SELECT query:', dbError.message);
+    return res.status(500).send("Something went wrong in DB");
+  }
+})
+
 router.post("/memory", async (req, res) => {
   const { content, consciousness, time, feeling, tags } = req.body;
 

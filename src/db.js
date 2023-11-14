@@ -55,11 +55,20 @@ export async function getAll() {
   return data;
 }
 
-async function getTagList({ memoryId }) {
-  return supabase
+export async function getTagList() {
+  let query = supabase
     .from("memories")
-    .select("tags")
-    .eq('memory_id', memoryId);
+    .select("tags");
+
+  // SELECT 쿼리 실행
+  const { data, error } = await query;
+
+  if (error) {
+    console.log(error);
+    throw new Error();
+  }
+
+  return data;
 }
 
 export async function updateMemory(id, {
