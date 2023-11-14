@@ -42,14 +42,21 @@ router.get("/tags", async (req, res) => {
 })
 
 router.post("/memory", async (req, res) => {
-  const { content, consciousness, time, feeling, tags } = req.body;
+  const { content, consciousness, time, feeling } = req.body;
 
   if (!content) {
     return res.status(400).send("Missing content in body");
   }
 
+  // const [imageURL, tags] = await Promise.all([
+  //   generateImageURL({ memory: content }),
+  //   generateTags({ memory: content }),
+  // ]);
+  // Tags 는 chatGPT가 생성함
+  const tags = await generateTags({ memory: content });
+  const imageUrl = ""; // 이미지는 일단 사용 X
+
   try {
-    const imageUrl = await generateImageURL({ memory: content });
     const memory = await DB.insertMemory({
       content,
       imageUrl,
@@ -59,12 +66,14 @@ router.post("/memory", async (req, res) => {
       tags,
     });
 
-    try {
-      sendMemoryToProcessing(memory);
-      return res.status(200).send(memory);
-    } catch (processingError) {
-      return res.status(500).send("Error in websocket");
-    }
+    // processing 열면 아래 코드 사용
+    // try {
+    //   sendMemoryToProcessing(memory);
+    //   return res.status(200).send(memory);
+    // } catch (processingError) {
+    //   return res.status(500).send("Error in websocket");
+    // }
+    return res.status(200).send(memory);
   } catch (dbError) {
     return res.status(500).send("Error in DB");
   }
